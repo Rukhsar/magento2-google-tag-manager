@@ -27,5 +27,18 @@ class GoogleTagManagerCode extends Template
         parent::__construct($context, $data);
     }
 
+    public function getAccountId()
+    {
+        return $this->_googleTagManagerHelper->getAccountId();
+    }
+
+    protected function _toHtml()
+    {
+        if (!$this->_googleTagManagerHelper->isEnabled())
+        {
+            return '';
+        }
+        return parent::_toHtml();
+    }
 
 }
