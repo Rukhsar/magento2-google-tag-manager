@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="after.body.start">
+            <block class="Rukhsar\GoogleTagManager\Block\GoogleTagManagerCode" name="gtm_iframe" as="gtm_iframe" template="Rukhsar_GoogleTagManager::iframe.phtml" />
+        </referenceContainer>
+        <referenceBlock name="head.additional">
+            <block class="Rukhsar\GoogleTagManager\Block\TagManager" name="rukhsar_gtm_datalayer" as="rukhsar_gtm_datalayer" template="Rukhsar_GoogleTagManager::data_layer.phtml" />
+            <block class="Rukhsar\GoogleTagManager\Block\GoogleTagManagerCode" name="gtm_js" as="gtm_js" template="Rukhsar_GoogleTagManager::js.phtml" />
+        </referenceBlock>
+    </body>
+</page>

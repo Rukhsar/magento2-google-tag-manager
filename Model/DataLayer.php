@@ -6,23 +6,58 @@ use Magento\Framework\DataObject;
 
 class DataLayer extends DataObject
 {
-
+    /**
+     * @var Quote|null
+     */
     protected $_quote = null;
 
+    /**
+     * Datalayer Variables
+     * @var array
+     */
     protected $_variables = [];
 
+    /**
+     * Customer session
+     *
+     * @var \Magento\Customer\Model\Session
+     */
     protected $_customerSession;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_scopeConfig;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
     protected $_context;
 
+    /**
+     * Core registry
+     *
+     * @var \Magento\Framework\Registry
+     */
     protected $_coreRegistry = null;
 
+    /**
+     * @var \Magento\Customer\Model\Session
+     */
     protected $_checkoutSession;
 
+    /**
+     * @var string
+     */
     protected $_fullActionName;
 
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\Registry $registry
+     */
     public function __construct(
         \Magento\Framework\App\Action\Context  $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -49,18 +84,35 @@ class DataLayer extends DataObject
 
     }
 
-    public function getVariables() {
+    /**
+     * Return Data Layer Variables
+     *
+     * @return array
+     */
+    public function getVariables()
+    {
         return $this->_variables;
     }
 
-    public function addVariable($name, $value) {
+    /**
+     * Add Variables
+     * @param string $name
+     * @param mix $value
+     * @return \Rukhsar\GoogleTagManager\Model\DataLayer
+     */
+    public function addVariable($name, $value)
+    {
         if (!empty($name)) {
             $this->_variables[$name] = $value;
         }
         return $this;
     }
 
-    protected function setCategoryDataLayer() {
+    /**
+     * Set category Data Layer
+     */
+    protected function setCategoryDataLayer()
+    {
         if($this->fullActionName === 'catalog_category_view'
             && $_category = $this->_coreRegistry->registry('current_category')
         ) {
@@ -74,7 +126,11 @@ class DataLayer extends DataObject
         return $this;
     }
 
-    protected function setProductDataLayer() {
+    /**
+     * Set product Data Layer
+     */
+    protected function setProductDataLayer()
+    {
         if($this->fullActionName === 'catalog_product_view'
             && $_product = $this->_coreRegistry->registry('current_product')
         ) {
@@ -89,7 +145,11 @@ class DataLayer extends DataObject
         return $this;
     }
 
-    protected function setCustomerDataLayer() {
+    /**
+     * Set Customer Data Layer
+     */
+    protected function setCustomerDataLayer()
+    {
         $customer = [];
         if ($this->_customerSession->isLoggedIn()) {
             $customer['isLoggedIn'] = true;
@@ -103,7 +163,11 @@ class DataLayer extends DataObject
         return $this;
     }
 
-    protected function setCartDataLayer() {
+    /**
+     * Set cart Data Layer
+     */
+    protected function setCartDataLayer()
+    {
         if($this->fullActionName === 'checkout_index_index'){
             $this->addVariable('list', 'cart');
         }
@@ -114,7 +178,7 @@ class DataLayer extends DataObject
         $cart['hasItems'] = false;
         if ($quote->getItemsCount()) {
             $items = [];
-            // set items
+
             foreach($quote->getAllVisibleItems() as $item){
                 $items[] = [
                     'sku' => $item->getSku(),
@@ -147,7 +211,11 @@ class DataLayer extends DataObject
         return $this;
     }
 
-
+    /**
+     * Get active quote
+     *
+     * @return Quote
+     */
     public function getQuote()
     {
         if (null === $this->_quote) {
@@ -156,7 +224,11 @@ class DataLayer extends DataObject
         return $this->_quote;
     }
 
-
+    /**
+     * Format Price
+     *
+     * @return float
+     */
     public function formatPrice($price){
         return sprintf('%.2F', $price);
     }
